@@ -1,8 +1,11 @@
 import json
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
+if os.path.exists('env.py'):
+    import env
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY')
 
 
 @app.route("/")
@@ -37,6 +40,9 @@ def contact():
         print(request.form.get('name'))
         # format['key'] if empty it thows an exception
         print(request.form['email'])
+
+        flash('Thanks {}, we have received your message'.format(
+            request.form.get("name")))
     return render_template("contact.html", page_title="Contact")
 
 
